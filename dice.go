@@ -13,6 +13,18 @@ func generateNumber(min int, max int) (result int) {
 	return rand.Intn(max-min) + min
 }
 
+func parseDice(dice string) (max int, numOfRolls int) {
+	DiceValues := strings.Split(dice, "d")
+	max, _ = strconv.Atoi(DiceValues[len(DiceValues)-1]) // can use _ because I verified before the second value is an integer.
+	if DiceValues[0] == "" {
+		numOfRolls = 1
+	} else {
+		numOfRolls, _ = strconv.Atoi(DiceValues[0]) // can use _ because I verified before the second value is an integer.
+	}
+
+	return max, numOfRolls
+}
+
 func main() {
 	var max int
 	var dice string
@@ -29,14 +41,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// parsing dice
-	DiceValues := strings.Split(dice, "d")
-	max, _ = strconv.Atoi(DiceValues[len(DiceValues)-1]) // can use _ because I verified before the second value is an integer.
-	if DiceValues[0] == "" {
-		numOfRolls = 1
-	} else {
-		numOfRolls, _ = strconv.Atoi(DiceValues[0]) // can use _ because I verified before the second value is an integer.
-	}
+	max, numOfRolls = parseDice(dice)
 
 	// rolls := make([]int, numOfRolls) // we'll add an array of values once we want to want to implement re-roll logic
 	fmt.Printf("Rolling dice %s.\n", dice)
