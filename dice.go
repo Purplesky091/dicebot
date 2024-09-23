@@ -17,6 +17,7 @@ func main() {
 	var max int
 	var dice string
 	var sum int
+	var numOfRolls int
 
 	fmt.Print("Input dice: ")
 	fmt.Scan(&dice)
@@ -30,15 +31,19 @@ func main() {
 
 	// parsing dice
 	DiceValues := strings.Split(dice, "d")
-	numOfRolls, _ := strconv.Atoi(DiceValues[0])         // can use _ because I verified before the second value is an integer.
 	max, _ = strconv.Atoi(DiceValues[len(DiceValues)-1]) // can use _ because I verified before the second value is an integer.
+	if DiceValues[0] == "" {
+		numOfRolls = 1
+	} else {
+		numOfRolls, _ = strconv.Atoi(DiceValues[0]) // can use _ because I verified before the second value is an integer.
+	}
 
-	rolls := make([]int, numOfRolls)
+	// rolls := make([]int, numOfRolls) // we'll add an array of values once we want to want to implement re-roll logic
 	fmt.Printf("Rolling dice %s.\n", dice)
 	for i := 0; i < numOfRolls; i++ {
-		rolls[i] = generateNumber(1, max)
-		fmt.Printf("Roll %d: %d\n", i+1, rolls[i])
-		sum += rolls[i]
+		diceroll := generateNumber(1, max)
+		fmt.Printf("Roll %d: %d\n", i+1, diceroll)
+		sum += diceroll
 	}
 
 	fmt.Printf("Sum: %d", sum)
