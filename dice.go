@@ -13,23 +13,23 @@ func generateNumber(min int, max int) (result int) {
 	return rand.Intn(max-min) + min
 }
 
-func parseDice(dice string) (max int, numOfRolls int) {
+func parseDice(dice string) (FaceCount int, RollCount int) {
 	DiceValues := strings.Split(dice, "d")
-	max, _ = strconv.Atoi(DiceValues[len(DiceValues)-1]) // can use _ because I verified before the second value is an integer.
+	FaceCount, _ = strconv.Atoi(DiceValues[len(DiceValues)-1]) // can use _ because I verified before the second value is an integer.
 	if DiceValues[0] == "" {
-		numOfRolls = 1
+		RollCount = 1
 	} else {
-		numOfRolls, _ = strconv.Atoi(DiceValues[0]) // can use _ because I verified before the second value is an integer.
+		RollCount, _ = strconv.Atoi(DiceValues[0]) // can use _ because I verified before the second value is an integer.
 	}
 
-	return max, numOfRolls
+	return FaceCount, RollCount
 }
 
 func main() {
-	var max int
+	var FaceCount int
 	var dice string
 	var sum int
-	var numOfRolls int
+	var RollCount int
 
 	fmt.Print("Input dice: ")
 	fmt.Scan(&dice)
@@ -41,12 +41,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	max, numOfRolls = parseDice(dice)
+	FaceCount, RollCount = parseDice(dice)
 
 	// rolls := make([]int, numOfRolls) // we'll add an array of values once we want to want to implement re-roll logic
 	fmt.Printf("Rolling dice %s.\n", dice)
-	for i := 0; i < numOfRolls; i++ {
-		diceroll := generateNumber(1, max)
+	for i := 0; i < RollCount; i++ {
+		diceroll := generateNumber(1, FaceCount)
 		fmt.Printf("Roll %d: %d\n", i+1, diceroll)
 		sum += diceroll
 	}
