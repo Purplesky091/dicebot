@@ -65,9 +65,8 @@ func main() {
 	var sum int
 	var RollCount int
 
-	// fmt.Print("Input dice: ")
-	// fmt.Scan(&dice)
-	dice = "9d50"
+	fmt.Print("Input dice: ")
+	fmt.Scan(&dice)
 	dice = strings.ToLower(dice)
 
 	// r, _ := regexp.Compile(`^(\d*)d(\d+)$`)
