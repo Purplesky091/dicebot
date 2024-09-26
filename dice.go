@@ -8,53 +8,42 @@ import (
 	"strings"
 )
 
-var MAX_VALUE int = 99
+var MAX_VALUE int = 100
 
 func printHelp() {
 	fmt.Println("Please input a dice with format [number]d[number]")
-	fmt.Println("[number] can be anywhere from 1 - 99")
+	fmt.Printf("[number] can be anywhere from 1 - %d\n", MAX_VALUE)
 }
 
 func generateNumber(min int, max int) (result int) {
 	return rand.Intn(max-min) + min
 }
 
+func parseValue(diceValue string) (value int) {
+	value, rollError := strconv.Atoi(diceValue)
+	if rollError != nil {
+		printHelp()
+		os.Exit(2)
+	} else if value > MAX_VALUE {
+		printHelp()
+		os.Exit(3)
+	} else if value <= 0 {
+		printHelp()
+		os.Exit(4)
+	}
+
+	return value
+}
+
 func parseDice(dice string) (FaceCount int, RollCount int) {
 	DiceValues := strings.Split(dice, "d")
-	FaceCount, faceErr := strconv.Atoi(DiceValues[len(DiceValues)-1])
 
 	if DiceValues[0] == "" {
 		RollCount = 1
 	} else {
-		parsedRoll, rollError := strconv.Atoi(DiceValues[0])
-		if rollError != nil {
-			printHelp()
-			os.Exit(2)
-		} else if parsedRoll > MAX_VALUE {
-			fmt.Printf("You cannot roll more than %d dice.\n", MAX_VALUE)
-			os.Exit(3)
-		} else if parsedRoll <= 0 {
-			printHelp()
-			fmt.Println("Your first [number] is less than 0. It must be 1-99")
-			os.Exit(4)
-		}
-
-		RollCount = parsedRoll
+		RollCount = parseValue(DiceValues[0])
 	}
-
-	// parsing number of faces
-	if faceErr != nil {
-		fmt.Println("Incorrect format, please input a dice with format [number]d[number]")
-		os.Exit(2)
-	} else if FaceCount > MAX_VALUE {
-		printHelp()
-		fmt.Printf("You cannot have a dice with more than %d faces.\n", MAX_VALUE)
-		os.Exit(3)
-	} else if FaceCount <= 0 {
-		printHelp()
-		fmt.Println("Your second [number] is less than 0. It must be 1-99")
-		os.Exit(4)
-	}
+	FaceCount = parseValue(DiceValues[len(DiceValues)-1])
 
 	return FaceCount, RollCount
 }
@@ -68,13 +57,6 @@ func main() {
 	fmt.Print("Input dice: ")
 	fmt.Scan(&dice)
 	dice = strings.ToLower(dice)
-
-	// r, _ := regexp.Compile(`^(\d*)d(\d+)$`)
-	// var IsValid bool = r.MatchString(dice)
-	// fmt.Printf("%s is valid: %t\n", dice, IsValid)
-	// if !IsValid {
-	// 	os.Exit(1)
-	// }
 
 	FaceCount, RollCount = parseDice(dice)
 
